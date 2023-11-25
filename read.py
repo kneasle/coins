@@ -147,14 +147,8 @@ def get_sorted_denominations(page_slug, name, count_string):
             if key not in parsed_unit:
                 continue
             right_elem, _ = parsed_unit[key]
-            sym_text = right_elem.text.strip()
-            sym_text = sym_text.replace("\u200e", "")
-            sym_text = sym_text.replace("numeric: ", "")
-            sym_text = re.sub(r"\[.*?\]", "", sym_text) # Remove citations
-            for sym in re.split(", | or | and |/|\(|\)", sym_text):
-                sym = sym.strip()
-                if sym != "" and "language" not in sym:
-                    units[sym] = 1 # The name itself is worth 1
+            for sym in read_unit_names(right_elem):
+                units[sym] = 1
 
     # Parse the `denominations` section for subunits
     parsed_denoms = parse_infobox(
@@ -213,13 +207,21 @@ def get_sorted_denominations(page_slug, name, count_string):
 
 
 def read_unit_names(elem):
+    # Preprocess text
     subunit = elem.text
-    # subunit = subunit.replace("\u200e", "")
-    # subunit = subunit.replace("numeric: ", "")
+    subunit = subunit.replace("\u200e", "")
+    subunit = subunit.replace("numeric: ", "")
     subunit = re.sub("\[.*?\]", "", subunit) # Remove references
     subunit = subunit.split('"')[0] # strip after "
     subunit = subunit.strip()
-    return [s.strip() for s in re.split(",|\n| or |\(|\)", subunit)]
+    # Parse out the subunit names
+    subunits = []
+    for s in re.split(",|\n| and | or |/|\(|\)", subunit):
+        s = s.strip()
+        if s != "" and "language" not in s:
+            first_word = s.split(" ")[0]
+            subunits += [first_word, s]
+    return subunits
 
 def parse_denoms(elem, type, is_rare, units):
     # Special case for GBP, which represents their elements as a list
