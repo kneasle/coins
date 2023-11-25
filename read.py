@@ -8,7 +8,8 @@ import sys
 
 def main():
     wiki_html = open("source-table.html").read()
-    currencies = parse_main_wiki_page(wiki_html) # [145:]
+    currencies = parse_main_wiki_page(wiki_html)
+    # currencies = currencies[155:]
 
     # If args are supplied, only use currencies which contain text of at least one of these args
     if len(sys.argv) > 1:
