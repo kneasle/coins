@@ -162,3 +162,9 @@ United Arab Emirates dirham ............... (1 fils, 5 fils, 10 fils) 25 fils
 Uruguayan peso ............................ $1
 Uzbekistani sum ........................... 50 sum
 Vanuatu vatu .............................. (vt 1, vt 2) vt 5
+Venezuelan sovereign bolívar .............. 25 céntimos
+Venezuelan digital bolívar ................ 25 céntimos
+Vietnamese đồng ........................... 1,000 dong [note]
+Yemeni rial ............................... yrl 1
+Zambian kwacha ............................ 5 ngwee
+Zimbabwean dollar ......................... (1¢, 5¢, 10¢, 25¢, 50¢, $1, $2, $2 [note], $5 [note]) $10 [note]

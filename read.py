@@ -9,7 +9,6 @@ import sys
 def main():
     wiki_html = open("source-table.html").read()
     currencies = parse_main_wiki_page(wiki_html)
-    # currencies = currencies[155:]
 
     # If args are supplied, only use currencies which contain text of at least one of these args
     if len(sys.argv) > 1:
@@ -28,7 +27,7 @@ def main():
             # Bitcoin is apparently legal tender in some countries, but has no coins and so can't
             # be collected
             continue
-        count_string = f"{count}/{len(currencies)}"
+        count_string = f"{count + 1}/{len(currencies)}"
 
         sorted_denoms = get_sorted_denominations(slug, name, count_string)
         smallest_denoms.append((name, sorted_denoms))
@@ -121,7 +120,7 @@ def get_sorted_denominations(page_slug, name, count_string):
     singular_name = name.split(" ")[-1]
     units[singular_name] = 1
     # Special cases for 1 and 0.01 denominations which don't appear in the wiki pages
-    for one_unit in ["¥ rmb", "$", "pesos dominicano", "rls", "ll", "ls"]:
+    for one_unit in ["¥ rmb", "$", "pesos dominicano", "rls", "ll", "ls", "dong"]:
         units[one_unit] = 1
     for cent_unit in ["¢", "centavos", "cop", "st", "pt", "kopeck"]:
         units[cent_unit] = 0.01
@@ -197,14 +196,47 @@ def get_sorted_denominations(page_slug, name, count_string):
         for left_elem, right_elem in elem_pairs:
             is_rare = "Rarely" in left_elem.text
             denoms += parse_denoms(right_elem, denom_type, is_rare, units)
-
     # Sort denoms by increasing value
     denoms.sort(key = lambda v: v[0])
-
     print(denoms)
     print("Smallest:", denoms[0])
     return denoms
 
+# Returns a type {string: (elem, [(elem, elem)])}
+def parse_infobox(heading_elem, next_section_names):
+    headings = {}
+
+    current_heading = None
+    current_right_elem = None
+    current_rows = []
+    def add_previous_headings():
+        if current_heading is None:
+            return
+        headings[current_heading] = (current_right_elem, current_rows)
+
+    row = heading_elem.next_sibling
+    while row.text.strip() not in next_section_names:
+        # Check if this row's text contains one of `next_section_names`
+        left, right = row.children
+        heading = left.text.strip()
+        is_bold = left.find("span", class_="nobold") is None
+
+        if is_bold:
+            # Starting a new heading
+            add_previous_headings()
+            current_heading = heading
+            current_right_elem = right
+            current_rows = []
+        else:
+            # Continuing a previous heading
+            assert(current_heading is not None)
+            current_rows.append((left, right))
+        row = row.next_sibling
+
+    # Make sure to add the last heading
+    add_previous_headings()
+
+    return headings
 
 def read_unit_names(elem):
     # Preprocess text
@@ -223,6 +255,10 @@ def read_unit_names(elem):
             subunits += [first_word, s]
     return subunits
 
+################################
+# READ THE COIN/BANKNOTE NAMES #
+################################
+
 def parse_denoms(elem, type, is_rare, units):
     # Special case for GBP, which represents their elements as a list
     if elem.ul is not None:
@@ -233,6 +269,7 @@ def parse_denoms(elem, type, is_rare, units):
         text = elem.text.lower().strip()
 
     # Normalise text
+    text = text.split(":")[-1].strip()
     text = text.replace("\xa0", " ") # Replace \ns with spaces
     text = text.replace("\n", " ") # Replace \ns with spaces
     text = re.sub("bimetallic", "", text) # Remove "bimetallic"
@@ -323,42 +360,6 @@ def parse_fraction(text):
         total += int(fraction)
 
     return total
-
-# Returns a type {string: (elem, [(elem, elem)])}
-def parse_infobox(heading_elem, next_section_names):
-    headings = {}
-
-    current_heading = None
-    current_right_elem = None
-    current_rows = []
-    def add_previous_headings():
-        if current_heading is None:
-            return
-        headings[current_heading] = (current_right_elem, current_rows)
-
-    row = heading_elem.next_sibling
-    while row.text.strip() not in next_section_names:
-        # Check if this row's text contains one of `next_section_names`
-        left, right = row.children
-        heading = left.text.strip()
-        is_bold = left.find("span", class_="nobold") is None
-
-        if is_bold:
-            # Starting a new heading
-            add_previous_headings()
-            current_heading = heading
-            current_right_elem = right
-            current_rows = []
-        else:
-            # Continuing a previous heading
-            assert(current_heading is not None)
-            current_rows.append((left, right))
-        row = row.next_sibling
-
-    # Make sure to add the last heading
-    add_previous_headings()
-
-    return headings
 
 ################
 # SAVE TO FILE #
