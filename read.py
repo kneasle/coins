@@ -22,15 +22,15 @@ def main():
     smallest_denoms = []
     for count, c in enumerate(currencies):
         slug = c["page_slug"]
-        name = c["name"]
+        currency_name = c["name"]
         if slug == "Bitcoin":
             # Bitcoin is apparently legal tender in some countries, but has no coins and so can't
             # be collected
             continue
         count_string = f"{count + 1}/{len(currencies)}"
 
-        sorted_denoms = get_sorted_denominations(slug, name, count_string)
-        smallest_denoms.append((name, sorted_denoms))
+        sorted_denoms = get_sorted_denominations(slug, currency_name, count_string)
+        smallest_denoms.append((currency_name, sorted_denoms))
         contents = file_contents(smallest_denoms)
         with open("out.txt", "w") as f:
             f.write(contents)
@@ -188,16 +188,18 @@ def get_sorted_denominations(page_slug, name, count_string):
     # Read the coin texts
     denoms = [] # (value, name, type, rare)
     for denom_type in ["Coin", "Banknote"]:
+        is_note = denom_type == "Banknote"
+
         key = denom_type + "s"
         if key not in parsed_denoms:
             continue # Skip in case a currency has e.g. no coins
         right_elem, elem_pairs = parsed_denoms[key]
-        denoms += parse_denoms(right_elem, denom_type, False, units)
+        denoms += parse_denoms(right_elem, is_note, False, units)
         for left_elem, right_elem in elem_pairs:
             is_rare = "Rarely" in left_elem.text
-            denoms += parse_denoms(right_elem, denom_type, is_rare, units)
+            denoms += parse_denoms(right_elem, is_note, is_rare, units)
     # Sort denoms by increasing value
-    denoms.sort(key = lambda v: v[0])
+    denoms.sort(key = lambda d: d.value)
     print(denoms)
     print("Smallest:", denoms[0])
     return denoms
@@ -259,7 +261,7 @@ def read_unit_names(elem):
 # READ THE COIN/BANKNOTE NAMES #
 ################################
 
-def parse_denoms(elem, type, is_rare, units):
+def parse_denoms(elem, is_note, is_rare, units):
     # Special case for GBP, which represents their elements as a list
     if elem.ul is not None:
         text = ""
@@ -337,7 +339,7 @@ def parse_denoms(elem, type, is_rare, units):
 
             value_multiplier = units[unit.lower()]
         value = number * value_multiplier
-        denominations.append((value, name, type, is_rare))
+        denominations.append(Denom(value, name, is_note, is_rare))
 
     return denominations
 
@@ -366,33 +368,47 @@ def parse_fraction(text):
 ################
 
 def file_contents(all_denoms):
-    longest_name_len = max([len(name) for name, _ in all_denoms])
+    longest_name_len = max([len(curr_name) for curr_name, _ in all_denoms])
 
     s = ""
-    for name, denoms in all_denoms:
+    for curr_name, denoms in all_denoms:
         # Separate a run of rare denominations, which would technically have the lowest values but
         # are so hard to collect that I consider them to be optional
         rare_denoms = []
         first_common_denom = None
         for d in denoms:
-            is_rare = d[3]
-            if not is_rare:
+            if not d.is_rare:
                 first_common_denom = d
                 break
             rare_denoms.append(d)
         # Build the string
-        s += f"{name} {'.' * (longest_name_len - len(name))}... "
+        s += f"{curr_name} {'.' * (longest_name_len - len(curr_name))}... "
         if rare_denoms != []:
-            rare_denoms_string = ", ".join([denom_name(d) for d in rare_denoms])
+            rare_denoms_string = ", ".join([d.full_name() for d in rare_denoms])
             s += f"({rare_denoms_string}) "
         if first_common_denom is not None:
-            s += denom_name(first_common_denom)
+            s += first_common_denom.full_name()
         s += "\n"
     return s
 
-def denom_name(denom):
-    _value, name, denom_type, _is_rare = denom
-    return f"{name} [note]" if denom_type != "Coin" else name;
+class Denom:
+    def __init__(self, value, name, is_note, is_rare):
+        self.value = value
+        self.name = name
+        self.is_note = is_note
+        self.is_rare = is_rare
+
+    def full_name(self):
+        return f"{self.name} [note]" if self.is_note else self.name;
+
+    def __repr__(self):
+        s = f"Denom({self.value}, {self.name}"
+        if self.is_note:
+            s += ", note"
+        if self.is_rare:
+            s += ", rare"
+        s += ")"
+        return s
 
 
 if __name__ == "__main__":
