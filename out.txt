@@ -1,9 +1,9 @@
 Abkhazian apsar ........................... 1 apsark
 Russian ruble ............................. (1 kop, 5 kop, 10 kop, 50 kop) 1 ₽
-Afghan afghani ............................ af. 1
+Afghan afghani ............................ Af. 1
 Euro ...................................... 1c
-Albanian lek .............................. (1 lek) 5  lekë
-Algerian dinar ............................ (1 da, 2 da) 5 da
+Albanian lek .............................. (1 Lek) 5  Lekë
+Algerian dinar ............................ (1 DA, 2 DA) 5 DA
 Angolan kwanza ............................ (50 cêntimos, 1 kwanza) 5 kwanzas
 Eastern Caribbean dollar .................. 5 cents
 Argentine peso ............................ (1 centavos, 5 centavos, 10 centavos, 25 centavos, 50 centavos) 1 pesos
@@ -21,7 +21,7 @@ Belarusian ruble .......................... 1 cop
 Belize dollar ............................. 1 cents
 West African CFA franc .................... 1 francs
 Bermudian dollar .......................... 1 cents
-Bhutanese ngultrum ........................ (ch.5, ch.10, ch.25, ch.50, nu.1) nu.1 [note]
+Bhutanese ngultrum ........................ (Ch.5, Ch.10, Ch.25, Ch.50, Nu.1) Nu.1 [note]
 Indian rupee .............................. ₹1
 Bolivian boliviano ........................ c.10
 United States dollar ...................... 1¢
@@ -38,20 +38,20 @@ Canadian dollar ........................... (1¢) 5¢
 Cape Verdean escudo ....................... (1 escudos) 5 escudos
 Cayman Islands dollar ..................... 1 cents
 Chilean peso .............................. 10 pesos
-Renminbi .................................. ¥1 rmb
+Renminbi .................................. ¥1 RMB
 Colombian peso ............................ ($50) $100
-Comorian franc ............................ (1 fc, 2 fc, 5 fc, 10 fc) 25 fc
+Comorian franc ............................ (1 FC, 2 FC, 5 FC, 10 FC) 25 FC
 Congolese franc ........................... 1 centimes [note]
 Cook Islands dollar ....................... 5c
 New Zealand dollar ........................ 10c
 Costa Rican colón ......................... (5 colones) 10 colones
 Cuban peso ................................ (1¢, 2¢, 5¢) 20¢
 Netherlands Antillean guilder ............. 1 cent
-Czech koruna .............................. 1 kč
+Czech koruna .............................. 1 Kč
 Danish krone .............................. 50-øre
-Djiboutian franc .......................... 1 fdj
+Djiboutian franc .......................... 1 Fdj
 Dominican peso ............................ pesos dominicanos1
-Egyptian pound ............................ 25 pt
+Egyptian pound ............................ 25 PT
 Eritrean nakfa ............................ 1 cents
 Swazi lilangeni ........................... 10 cents
 South African rand ........................ 10c
@@ -60,10 +60,10 @@ Falkland Islands pound .................... 1p
 Sterling .................................. 1p
 Faroese króna ............................. 50 oyru
 Fijian dollar ............................. 5c
-CFP franc ................................. f 5
+CFP franc ................................. F 5
 Gambian dalasi ............................ 1 bututs
 Georgian lari ............................. 5 tetri
-Ghanaian cedi ............................. 1gp
+Ghanaian cedi ............................. 1Gp
 Gibraltar pound ........................... 1p
 Guatemalan quetzal ........................ 1 centavos
 Guernsey pound ............................ 1p
@@ -72,11 +72,11 @@ Guyanese dollar ........................... $1
 Haitian gourde ............................ 5c
 Honduran lempira .......................... 5 centavos
 Hong Kong dollar .......................... 10¢
-Hungarian forint .......................... 5 ft
+Hungarian forint .......................... 5 Ft
 Icelandic króna ........................... 1 króna
-Indonesian rupiah ......................... (rp50, rp100, rp200) rp500
-Iranian rial .............................. (rls 1,000, rls 1,000 [note], rls 2,000, rls 2,000 [note]) rls 5,000
-Iraqi dinar ............................... id 25
+Indonesian rupiah ......................... (Rp50, Rp100, Rp200) Rp500
+Iranian rial .............................. (Rls 1,000, Rls 1,000 [note], Rls 2,000, Rls 2,000 [note]) Rls 5,000
+Iraqi dinar ............................... ID 25
 Manx pound ................................ 1p
 Israeli new shekel ........................ 10 agorot
 Jamaican dollar ........................... ($1) $5
@@ -91,13 +91,13 @@ South Korean won .......................... (₩1, ₩5) ₩10
 Kuwaiti dinar ............................. 5 fils
 Kyrgyz som ................................ (1 tyiyn, 1 tyiyn [note], 10 tyiyn, 10 tyiyn [note], 50 tyiyn, 50 tyiyn [note]) 1 som
 Lao kip ................................... (10 att, 20 att, 50 att, 1 kip [note], 5 kip [note], 10 kip [note], 20 kip [note], 50 kip [note], 100 kip [note]) 500 kip [note]
-Lebanese pound ............................ ll 250
+Lebanese pound ............................ LL 250
 Lesotho loti .............................. 1 lisente
 Liberian dollar ........................... 5¢
 Libyan dinar .............................. (1 dh., 5 dhs., 10 dhs., 20 dhs.) 50 dhs.
-Swiss franc ............................... 5 centimes
+Swiss franc ............................... 5 Centimes
 Macanese pataca ........................... 10 avos
-Malagasy ariary ........................... (1 iraimbilanja, 2 iraimbilanja, 1 ar, 2 ar, 4 ar, 5 ar) 10 ar
+Malagasy ariary ........................... (1 iraimbilanja, 2 iraimbilanja, 1 Ar, 2 Ar, 4 Ar, 5 Ar) 10 Ar
 Malawian kwacha ........................... (1 tambala, 2 tambala, 5 tambala, 10 tambala, 20 tambala, 50 tambala) 1 kwacha
 Malaysian ringgit ......................... (1 sen) 5 sen
 Maldivian rufiyaa ......................... (1 laari, 5 laari, 10 laari, 25 laari) 50 laari
@@ -108,17 +108,17 @@ Moldovan leu .............................. (1 ban) 5 bani
 Mongolian tögrög .......................... (₮1 [note], ₮5 [note]) ₮10 [note]
 Moroccan dirham ........................... 10 santimat
 Mozambican metical ........................ (1 centavos, 5 centavos, 10 centavos, 20 centavos, 50 centavos) 1 meticais
-Burmese kyat .............................. (k 1/-, k 1/- [note], ks. 5/-, ks. 5/- [note], ks. 10/-, ks. 10/- [note], ks. 20/- [note], ks. 50/-) ks. 50/- [note]
+Burmese kyat .............................. (K 1/-, K 1/- [note], Ks. 5/-, Ks. 5/- [note], Ks. 10/-, Ks. 10/- [note], Ks. 20/- [note], Ks. 50/-) Ks. 50/- [note]
 Namibian dollar ........................... 5c
 Nepalese rupee ............................ (1 paisa, 5 paisa, 10 paisa, 25 paisa, 50 paisa) रु1
 Nicaraguan córdoba ........................ 5 centavos
 Nigerian naira ............................ 50 kobo
 Niue dollar ............................... 10c
-Macedonian denar .......................... 1 mkd
+Macedonian denar .......................... 1 MKD
 Turkish lira .............................. (1kr, 5kr, 10kr) 25kr
 Norwegian krone ........................... 1 kroner
 Omani rial ................................ 5 baisa
-Pakistani rupee ........................... re. 1/-
+Pakistani rupee ........................... Re. 1/-
 Panamanian balboa ......................... 1 centésimos
 Papua New Guinean kina .................... 5t
 Paraguayan guaraní ........................ ₲50
@@ -134,19 +134,19 @@ Canadian Dollar ........................... (1¢) 5¢
 Samoan tālā ............................... 10 sene
 São Tomé and Príncipe dobra ............... 10 cêntimos
 Saudi riyal ............................... 1 halalas
-Serbian dinar ............................. din 1
+Serbian dinar ............................. DIN 1
 Seychellois rupee ......................... 1c
 Sierra Leonean leone ...................... 1¢
 Solomon Islands dollar .................... 10 cents
 Somali shilling ........................... 5 cents
 Somaliland shilling ....................... 1/-
-South Sudanese pound ...................... ssp 1
-Sri Lankan rupee .......................... re. 1/-
-Sudanese pound ............................ 1 pt
+South Sudanese pound ...................... SSP 1
+Sri Lankan rupee .......................... Re. 1/-
+Sudanese pound ............................ 1 PT
 Surinamese dollar ......................... 1 cent
 Swedish krona ............................. 1 kr
-Syrian pound .............................. ls 5
-New Taiwan dollar ......................... (1⁄2¢, 1¢, 2¢, 5¢, 10¢, 20¢, 50¢) nt$1
+Syrian pound .............................. LS 5
+New Taiwan dollar ......................... (1⁄2¢, 1¢, 2¢, 5¢, 10¢, 20¢, 50¢) NT$1
 Tajikistani somoni ........................ (1 dirams, 1 dirams [note], 2 dirams, 5 dirams, 5 dirams [note]) 10 dirams
 Tanzanian shilling ........................ 50/=
 Thai baht ................................. (1 satang, 5 satang, 10 satang) 25 satang
@@ -161,10 +161,10 @@ Ukrainian hryvnia ......................... (10 kopiyok, 50 kopiyok) ₴1
 United Arab Emirates dirham ............... (1 fils, 5 fils, 10 fils) 25 fils
 Uruguayan peso ............................ $1
 Uzbekistani sum ........................... 50 sum
-Vanuatu vatu .............................. (vt 1, vt 2) vt 5
+Vanuatu vatu .............................. (VT 1, VT 2) VT 5
 Venezuelan sovereign bolívar .............. 25 céntimos
 Venezuelan digital bolívar ................ 25 céntimos
 Vietnamese đồng ........................... 1,000 dong [note]
-Yemeni rial ............................... yrl 1
+Yemeni rial ............................... YRl 1
 Zambian kwacha ............................ 5 ngwee
 Zimbabwean dollar ......................... (1¢, 5¢, 10¢, 25¢, 50¢, $1, $2, $2 [note], $5 [note]) $10 [note]

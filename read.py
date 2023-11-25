@@ -266,7 +266,7 @@ def parse_denoms(elem, type, is_rare, units):
         for item in elem.find_all("li"):
             text += ", " + item.text
     else:
-        text = elem.text.lower().strip()
+        text = elem.text.strip()
 
     # Normalise text
     text = text.split(":")[-1].strip()
@@ -335,7 +335,7 @@ def parse_denoms(elem, type, is_rare, units):
             else:
                 last_unit = unit
 
-            value_multiplier = units[unit]
+            value_multiplier = units[unit.lower()]
         value = number * value_multiplier
         denominations.append((value, name, type, is_rare))
 
