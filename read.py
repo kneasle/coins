@@ -31,7 +31,7 @@ def main():
 
         sorted_denoms = get_sorted_denominations(slug, currency_name, count_string)
         smallest_denoms.append((currency_name, sorted_denoms))
-        contents = file_contents(smallest_denoms)
+        contents = make_file_contents(smallest_denoms)
         with open("out.txt", "w") as f:
             f.write(contents)
 
@@ -367,7 +367,7 @@ def parse_fraction(text):
 # SAVE TO FILE #
 ################
 
-def file_contents(all_denoms):
+def make_file_contents(all_denoms):
     longest_name_len = max([len(curr_name) for curr_name, _ in all_denoms])
 
     s = ""
@@ -384,8 +384,7 @@ def file_contents(all_denoms):
         # Build the string
         s += f"{curr_name} {'.' * (longest_name_len - len(curr_name))}... "
         if rare_denoms != []:
-            rare_denoms_string = ", ".join([d.full_name() for d in rare_denoms])
-            s += f"({rare_denoms_string}) "
+            s += f"({Denom.combined_string(rare_denoms)}) "
         if first_common_denom is not None:
             s += first_common_denom.full_name()
         s += "\n"
@@ -399,7 +398,57 @@ class Denom:
         self.is_rare = is_rare
 
     def full_name(self):
-        return f"{self.name} [note]" if self.is_note else self.name;
+        return self.name + (" [note]" if self.is_note else "");
+
+    # Given a list of denoms, creates a string like "1p, 2p, 5p" or combine common prefixes
+    # like "1, 5, 10 dirhams" (instead of "1 dirhams, 5 dirhams, 10 dirhams")
+    @classmethod
+    def combined_string(_class, denoms):
+        # Split the denominations into consecutive groups which share a (prefix, suffix) pair.
+        # These will then have their prefixes/suffixes merged.
+        combination_groups = [] # (prefix, suffix, numbers)
+        group_prefix = None
+        group_suffix = None
+        group_numbers = []
+        def add_group():
+            if group_prefix is None or group_suffix is None:
+                return
+            combination_groups.append((group_prefix, group_suffix, group_numbers))
+        # Loop to build up the groups
+        num_regex = re.compile("[0-9,⁄]+")
+        for d in denoms:
+            number = num_regex.findall(d.name)[0]
+            prefix, suffix = num_regex.split(d.name)
+            if prefix != group_prefix or suffix != group_suffix:
+                add_group()
+                group_prefix = prefix
+                group_suffix = suffix
+                group_numbers = []
+            group_numbers.append((number, d.is_note))
+        add_group() # Make sure to add final group
+
+        # Join each group together independently
+        string = ""
+        for prefix, suffix, numbers in combination_groups:
+            should_dedup_prefix = prefix.endswith(" ")
+            should_dedup_suffix = suffix.startswith(" ")
+            # Delimit groups with commas
+            if string != "":
+                string += ", "
+            # Add group
+            is_first_number = True
+            string += prefix if should_dedup_prefix else ""
+            for n, is_note in numbers:
+                # Delimit with commas
+                string += "" if is_first_number else ", "
+                is_first_number = False
+                # Add denomination
+                string += "" if should_dedup_prefix else prefix
+                string += n
+                string += "" if should_dedup_suffix else suffix
+                string += " [note]" if is_note else ""
+            string += suffix if should_dedup_suffix else ""
+        return string
 
     def __repr__(self):
         s = f"Denom({self.value}, {self.name}"
