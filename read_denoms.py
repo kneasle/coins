@@ -5,8 +5,10 @@ import requests
 import re
 import time
 import sys
+import json
 
 def main():
+    # Use the main 'world currencies' wiki page to get a list of currencies in use in each country
     wiki_html = open("source-table.html").read()
     currencies = parse_main_wiki_page(wiki_html)
 
@@ -19,21 +21,14 @@ def main():
             return False
         currencies = [c for c in currencies if in_args(c)]
 
-    smallest_denoms = []
+    # Read denominations from each currency's wiki page
     for count, c in enumerate(currencies):
-        slug = c["page_slug"]
-        currency_name = c["name"]
-        if slug == "Bitcoin":
-            # Bitcoin is apparently legal tender in some countries, but has no coins and so can't
-            # be collected
-            continue
         count_string = f"{count + 1}/{len(currencies)}"
+        c["denominations"] = get_sorted_denominations(c["page_slug"], c["name"], count_string)
 
-        sorted_denoms = get_sorted_denominations(slug, currency_name, count_string)
-        smallest_denoms.append((currency_name, sorted_denoms))
-        contents = make_file_contents(smallest_denoms)
-        with open("out.txt", "w") as f:
-            f.write(contents)
+    # Save denominations to JSON
+    with open("currencies.json", "w") as f:
+        f.write(json.dumps(currencies, indent = 4))
 
 #####################
 # PARSING MAIN PAGE #
@@ -83,6 +78,8 @@ def parse_main_wiki_page(wiki_html):
     # Flatten this map back into a list
     currencies = []
     for wiki_url in currency_map:
+        if wiki_url == "Bitcoin":
+            continue # Bitcoin has no coins and can't be collected
         obj = currency_map[wiki_url]
         obj["page_slug"] = wiki_url
         currencies.append(obj)
@@ -199,7 +196,7 @@ def get_sorted_denominations(page_slug, name, count_string):
             is_rare = "Rarely" in left_elem.text
             denoms += parse_denoms(right_elem, is_note, is_rare, units)
     # Sort denoms by increasing value
-    denoms.sort(key = lambda d: d.value)
+    denoms.sort(key = lambda d: d["value"])
     print(denoms)
     print("Smallest:", denoms[0])
     return denoms
@@ -339,7 +336,7 @@ def parse_denoms(elem, is_note, is_rare, units):
 
             value_multiplier = units[unit.lower()]
         value = number * value_multiplier
-        denominations.append(Denom(value, name, is_note, is_rare))
+        denominations.append({ "value": value, "name": name, "is_note": is_note, "is_rare": is_rare })
 
     return denominations
 
@@ -362,102 +359,6 @@ def parse_fraction(text):
         total += int(fraction)
 
     return total
-
-################
-# SAVE TO FILE #
-################
-
-def make_file_contents(all_denoms):
-    longest_name_len = max([len(curr_name) for curr_name, _ in all_denoms])
-
-    s = ""
-    for curr_name, denoms in all_denoms:
-        # Separate a run of rare denominations, which would technically have the lowest values but
-        # are so hard to collect that I consider them to be optional
-        rare_denoms = []
-        first_common_denom = None
-        for d in denoms:
-            if not d.is_rare:
-                first_common_denom = d
-                break
-            rare_denoms.append(d)
-        # Build the string
-        s += f"{curr_name} {'.' * (longest_name_len - len(curr_name))}... "
-        if rare_denoms != []:
-            s += f"({Denom.combined_string(rare_denoms)}) "
-        if first_common_denom is not None:
-            s += first_common_denom.full_name()
-        s += "\n"
-    return s
-
-class Denom:
-    def __init__(self, value, name, is_note, is_rare):
-        self.value = value
-        self.name = name
-        self.is_note = is_note
-        self.is_rare = is_rare
-
-    def full_name(self):
-        return self.name + (" [note]" if self.is_note else "");
-
-    # Given a list of denoms, creates a string like "1p, 2p, 5p" or combine common prefixes
-    # like "1, 5, 10 dirhams" (instead of "1 dirhams, 5 dirhams, 10 dirhams")
-    @classmethod
-    def combined_string(_class, denoms):
-        # Split the denominations into consecutive groups which share a (prefix, suffix) pair.
-        # These will then have their prefixes/suffixes merged.
-        combination_groups = [] # (prefix, suffix, numbers)
-        group_prefix = None
-        group_suffix = None
-        group_numbers = []
-        def add_group():
-            if group_prefix is None or group_suffix is None:
-                return
-            combination_groups.append((group_prefix, group_suffix, group_numbers))
-        # Loop to build up the groups
-        num_regex = re.compile("[0-9,⁄]+")
-        for d in denoms:
-            number = num_regex.findall(d.name)[0]
-            prefix, suffix = num_regex.split(d.name)
-            if prefix != group_prefix or suffix != group_suffix:
-                add_group()
-                group_prefix = prefix
-                group_suffix = suffix
-                group_numbers = []
-            group_numbers.append((number, d.is_note))
-        add_group() # Make sure to add final group
-
-        # Join each group together independently
-        string = ""
-        for prefix, suffix, numbers in combination_groups:
-            should_dedup_prefix = prefix.endswith(" ")
-            should_dedup_suffix = suffix.startswith(" ")
-            # Delimit groups with commas
-            if string != "":
-                string += ", "
-            # Add group
-            is_first_number = True
-            string += prefix if should_dedup_prefix else ""
-            for n, is_note in numbers:
-                # Delimit with commas
-                string += "" if is_first_number else ", "
-                is_first_number = False
-                # Add denomination
-                string += "" if should_dedup_prefix else prefix
-                string += n
-                string += "" if should_dedup_suffix else suffix
-                string += " [note]" if is_note else ""
-            string += suffix if should_dedup_suffix else ""
-        return string
-
-    def __repr__(self):
-        s = f"Denom({self.value}, {self.name}"
-        if self.is_note:
-            s += ", note"
-        if self.is_rare:
-            s += ", rare"
-        s += ")"
-        return s
 
 
 if __name__ == "__main__":
