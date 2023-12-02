@@ -7,6 +7,8 @@ import time
 import sys
 import json
 
+import utils
+
 def main():
     # Use the main 'world currencies' wiki page to get a list of currencies in use in each country
     wiki_html = open("source-table.html").read()
@@ -23,8 +25,8 @@ def main():
 
     # Read denominations from each currency's wiki page
     for count, c in enumerate(currencies):
-        count_string = f"{count + 1}/{len(currencies)}"
-        c["denominations"] = get_sorted_denominations(c["page_slug"], c["name"], count_string)
+        print(f"## {count + 1}/{len(currencies)} {c['name']}")
+        c["denominations"] = get_sorted_denominations(c["page_slug"], c["name"])
 
     # Save denominations to JSON
     with open("currencies.json", "w") as f:
@@ -78,9 +80,9 @@ def parse_main_wiki_page(wiki_html):
     # Flatten this map back into a list
     currencies = []
     for wiki_url in currency_map:
-        if wiki_url == "Bitcoin":
-            continue # Bitcoin has no coins and can't be collected
         obj = currency_map[wiki_url]
+        if wiki_url == "Bitcoin" or "digital" in obj["name"]:
+            continue # Bitcoin has no coins and can't be collected
         obj["page_slug"] = wiki_url
         currencies.append(obj)
     return currencies
@@ -89,25 +91,14 @@ def parse_main_wiki_page(wiki_html):
 # PARSING EACH CURRENCY'S PAGE #
 ################################
 
-def get_sorted_denominations(page_slug, name, count_string):
+def get_sorted_denominations(page_slug, name):
     print()
     print()
     print()
     print("------------------------------------")
 
     # Check for cached page
-    cache_path = f".wiki_cache/{page_slug}.html"
-    url = "http://en.wikipedia.org/wiki/" + page_slug
-    try:
-        page_html = open(cache_path, "r").read()
-        print(f"## {count_string} {name} :: {url} (cached)")
-    except FileNotFoundError as e:
-        # Cache file not found, so fetch the URL
-        print(f"## {count_string} {name} :: {url} (downloading...)")
-        page_html = requests.get(url).text
-        with open(cache_path, "w") as f:
-            f.write(page_html)
-    soup = BeautifulSoup(page_html, features = "lxml")
+    soup = BeautifulSoup(utils.get_wiki_html(page_slug), features = "lxml")
 
     # ==== Get which denominations exist and how much they're worth ===
     # Maps unit names to values.  E.g. GBP would be {"£": 1, "p": 0.01}

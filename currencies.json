@@ -14142,63 +14142,6 @@
         ]
     },
     {
-        "name": "Venezuelan digital bol\u00edvar",
-        "countries": [
-            "Venezuela"
-        ],
-        "page_slug": "Venezuelan_bol%C3%ADvar#Digital_bol\u00edvar",
-        "denominations": [
-            {
-                "value": 0.25,
-                "name": "25 c\u00e9ntimos",
-                "is_note": false,
-                "is_rare": false
-            },
-            {
-                "value": 0.5,
-                "name": "50 c\u00e9ntimos",
-                "is_note": false,
-                "is_rare": false
-            },
-            {
-                "value": 1,
-                "name": "Bs. 1",
-                "is_note": false,
-                "is_rare": false
-            },
-            {
-                "value": 5,
-                "name": "Bs. 5",
-                "is_note": true,
-                "is_rare": false
-            },
-            {
-                "value": 10,
-                "name": "Bs. 10",
-                "is_note": true,
-                "is_rare": false
-            },
-            {
-                "value": 20,
-                "name": "Bs. 20",
-                "is_note": true,
-                "is_rare": false
-            },
-            {
-                "value": 50,
-                "name": "Bs. 50",
-                "is_note": true,
-                "is_rare": false
-            },
-            {
-                "value": 100,
-                "name": "Bs. 100",
-                "is_note": true,
-                "is_rare": false
-            }
-        ]
-    },
-    {
         "name": "Vietnamese \u0111\u1ed3ng",
         "countries": [
             "Vietnam"

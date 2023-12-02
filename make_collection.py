@@ -4,8 +4,13 @@ import json
 import re
 
 def main():
-    # Load saved list of currencies
+    # Load currency data
     currencies = json.loads(open("currencies.json").read())
+    # Load country data
+
+    for c in currencies:
+        print(c["name"], c["countries"])
+
     # Write them to a summary file in a nice format
     with open("summary.txt", "w") as f:
         f.write(make_file_contents(currencies))
